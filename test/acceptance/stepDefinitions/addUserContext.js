@@ -42,14 +42,6 @@ Given('the admin has created following users', function (dataTable) {
     return adminHasCreatedUser(dataTable);
 });
 
-// When('the admin creates user with following details using API', function (dataTable) {
-//     return adminCreatesUserUsingAPI(dataTable);
-// });
-//
-// Then('new user {string} should be created', function (username) {
-//     return newUserShouldOrShouldnotBeCreated(username);
-// });
-
 const adminHasCreatedUser = async function (dataTable) {
     const header = {}
     const url = client.globals.backend_url + "api/index.php/users"
@@ -121,7 +113,6 @@ Before(async () => {
     initialUsers = await getUser();
 })
 
-
 After(async () => {
     const finalUsers = await getUser();
     const header = {}
@@ -150,41 +141,3 @@ After(async () => {
         }
     }
 })
-
-// const adminCreatesUserUsingAPI = async function (dataTable) {
-//     const header = {}
-//     const url = client.globals.backend_url + "api/index.php/users"
-//     header['Accept'] = 'application/json'
-//     header['DOLAPIKEY'] = client.globals.dolApiKey
-//     header['Content-Type'] = 'application/json'
-//     header['Accept'] = 'application/json'
-//     const users = dataTable.hashes()
-//     for (const user of users) {
-//         await fetch(apiKey, {
-//             method: 'GET',
-//             headers: header['Accept'],
-//             body: JSON.stringify(
-//                 {
-//                     login: user['login'],
-//                     lastname: user['lastname'],
-//                     pass: user['password']
-//                 }
-//             )
-//         })
-//             .then((response) => {
-//                 return response
-//             })
-//     }
-// }
-//     const newUserShouldOrShouldnotBeCreated =  function(username){
-//         const response = adminCreatesUserUsingAPI();
-//         if (response.status < 200 || response.status >= 400) {
-//             console.log("inside the method newUserShouldbecreared")
-//             throw new Error(response.statusText);
-//         }
-//       }
-
-
-
-
-
