@@ -20,3 +20,21 @@ Then('the user should not be able to login', function () {
 Then('error message {string} should be displayed in the webUI', function (errormessage) {
 	return client.page.loginPage().loginErrorDisplayed(errormessage);
 });
+
+// When('user browses to the forgotten password page', function () {
+//    return client.page.loginPage().userBrowsesToForgottenPassword();
+// });
+
+// When('the user enters login {string} and the security code', function (username) {
+//     return client.page.loginPage().userEntersSecurityCode(username);
+//
+// });
+//
+// Then('the message {string} should be displayed in the webUI', async function (codeMessage) {
+// await client.page.loginPage().messageForSecurityCode(codeMessage);
+// });
+
+
+
+
+
