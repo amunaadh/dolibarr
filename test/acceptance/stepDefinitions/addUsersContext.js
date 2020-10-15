@@ -87,7 +87,7 @@ const adminCreatesUserWithAPI = function (dataTable) {
     return createUserRequest(userDetails['login'], userDetails['last name'], userDetails['password'])
         .then((res) => {
             response = res;
-        });
+    });
 };
 
 const adminHasCreatedUser = async function (dataTable) {
@@ -98,8 +98,8 @@ const adminHasCreatedUser = async function (dataTable) {
                 if (response.status < 200 || response.status >= 400) {
                     throw new Error('Failed to create user: ' + user['login'] +
                         ' ' + response.statusText);
-                }
-            });
+            }
+        });
     }
 };
 
@@ -117,8 +117,8 @@ const getUsersLogin = async function () {
             const json_response = await response.json();
             for (const user of json_response) {
                 Login[user.login] = user.login;
-            }
-        });
+        }
+    });
 };
 
 const userDoesNotExist = async function (login) {
