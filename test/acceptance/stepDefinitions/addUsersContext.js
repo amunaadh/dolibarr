@@ -86,7 +86,7 @@ const adminCreatesUserWithAPI = function (dataTable) {
     const userDetails = dataTable.rowsHash();
     return createUserRequest(userDetails['login'], userDetails['last name'], userDetails['password'])
         .then((res) => {
-            response = res;
+            client.globals.response = res;
     });
 };
 
@@ -143,13 +143,13 @@ const userShouldExist = async function (login) {
 };
 
 const getStatusCode = async function (expectedStatusCode) {
-    const actualStatusCode = response.status.toString();
+    const actualStatusCode = client.globals.response.status.toString();
     return assert.strictEqual(actualStatusCode, expectedStatusCode,
         `The expected status code was ${expectedStatusCode} but got ${actualStatusCode}`);
 };
 
 const getResponseMessage = async function (expectedResponseMessage) {
-    const json_response = await response.json();
+    const json_response = await client.globals.response.json();
     const actualResponseMessage = json_response['error']['0'];
     return assert.strictEqual(actualResponseMessage, expectedResponseMessage,
         `the expected response message was ${expectedResponseMessage} but got ${actualResponseMessage}`);

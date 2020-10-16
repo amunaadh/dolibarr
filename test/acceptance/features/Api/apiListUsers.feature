@@ -11,8 +11,8 @@ Scenario: Admin user should be able to see list of created users
   Then the response status code should be "200"
   And the users list returned by API should be following:
     | login    | last name  |
-    | dolibarr | SuperAdmin |
     | Harry    | Potter     |
+    | dolibarr | SuperAdmin |
 
 Scenario: Non-admin users should not be able to see the list of users
   Given the admin has created the following users

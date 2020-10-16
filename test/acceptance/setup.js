@@ -40,7 +40,6 @@ const getDolApiKey = async function (login = null, password = null) {
     })
         .then(async (response) => {
             const jsonResponse = await response.json();
-            console.log(jsonResponse)
             dolApiKey = jsonResponse['success']['token'];
             if(login === client.globals.adminUsername && password === client.globals.adminPassword)
 			{
