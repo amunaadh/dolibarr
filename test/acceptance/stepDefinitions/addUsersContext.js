@@ -2,7 +2,6 @@ const {Given, When, Then} = require('cucumber');
 const {client} = require('nightwatch-api');
 const fetch = require('node-fetch');
 const assert = require('assert');
-let response;
 let Login = {};
 
 Given('the administrator has logged in using the webUI', async function () {
@@ -63,7 +62,7 @@ Then('the response message should be {string}', function (expectedResponseMessag
     return getResponseMessage(expectedResponseMessage);
 });
 
-const createUserRequest = function (login, lastname, password) {
+const createUserRequest = function (login, lastname, password, api_key = null) {
     const header = {};
     const url = client.globals.backend_url + 'api/index.php/users';
     header['Accept'] = 'application/json';
@@ -76,7 +75,8 @@ const createUserRequest = function (login, lastname, password) {
             {
                 login: login,
                 lastname: lastname,
-                pass: password
+                pass: password,
+                api_key: api_key
             }
         )
     });
@@ -87,19 +87,19 @@ const adminCreatesUserWithAPI = function (dataTable) {
     return createUserRequest(userDetails['login'], userDetails['last name'], userDetails['password'])
         .then((res) => {
             client.globals.response = res;
-    });
+        });
 };
 
 const adminHasCreatedUser = async function (dataTable) {
     const userDetails = dataTable.hashes();
     for (const user of userDetails) {
-        await createUserRequest(user['login'], user['last name'], user['password'])
+        await createUserRequest(user['login'], user['last name'], user['password'], user['api_key'])
             .then((response) => {
                 if (response.status < 200 || response.status >= 400) {
                     throw new Error('Failed to create user: ' + user['login'] +
                         ' ' + response.statusText);
-            }
-        });
+                }
+            });
     }
 };
 
@@ -117,8 +117,8 @@ const getUsersLogin = async function () {
             const json_response = await response.json();
             for (const user of json_response) {
                 Login[user.login] = user.login;
-        }
-    });
+            }
+        });
 };
 
 const userDoesNotExist = async function (login) {

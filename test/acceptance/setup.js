@@ -4,22 +4,31 @@ const fetch = require('node-fetch');
 let initialUsers = {};
 let dolApiKey = '';
 
-const getUsers = async function () {
+const getUsers = async function (api_key = null) {
     const header = {};
     const url = client.globals.backend_url + 'api/index.php/users';
-    const users = {};
     header['Accept'] = 'application/json';
-    header['DOLAPIKEY'] = dolApiKey;
+    if (api_key === null) {
+        header['DOLAPIKEY'] = client.globals.dolApiKey;
+    } else {
+        header['DOLAPIKEY'] = api_key;
+    }
     await fetch(url, {
         method: 'GET',
         headers: header
     })
         .then(async (response) => {
-            const json_response = await response.json();
-            for (const user of json_response) {
-                users[user.id] = user.id;
-            }
+            client.globals.response = response;
         });
+};
+
+const getUsersId = async function () {
+    const users = {};
+    await getUsers();
+    const json_response = await client.globals.response.json();
+    for (const user of json_response) {
+        users[user.id] = user.id;
+    }
     return users;
 };
 
@@ -41,12 +50,11 @@ const getDolApiKey = async function (login = null, password = null) {
         .then(async (response) => {
             const jsonResponse = await response.json();
             dolApiKey = jsonResponse['success']['token'];
-            if(login === client.globals.adminUsername && password === client.globals.adminPassword)
-			{
-				client.globals.dolApiKey = dolApiKey;
-			}
-            return dolApiKey;
-    });
+            if (login === client.globals.adminUsername && password === client.globals.adminPassword) {
+                client.globals.dolApiKey = dolApiKey;
+            }
+        });
+    return dolApiKey;
 };
 
 Before(async function getAdminDolApiKey() {
@@ -54,15 +62,15 @@ Before(async function getAdminDolApiKey() {
 });
 
 Before(async () => {
-    initialUsers = await getUsers();
+    initialUsers = await getUsersId();
 });
 
 After(async () => {
-    const finalUsers = await getUsers();
+    const finalUsers = await getUsersId();
     const header = {};
     const url = client.globals.backend_url + 'api/index.php/users/';
     header['Accept'] = 'application/json';
-    header['DOLAPIKEY'] = dolApiKey;
+    header['DOLAPIKEY'] = client.globals.dolApiKey;
     let found;
     for (const finaluser in finalUsers) {
         for (const initialuser in initialUsers) {
@@ -85,4 +93,4 @@ After(async () => {
         }
     }
 });
-module.exports = {getDolApiKey};
+module.exports = {getDolApiKey, getUsers};
